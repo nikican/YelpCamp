@@ -23,7 +23,7 @@ app.get("/campgrounds", function(req, res) {
     Campground.find({}, function(error, items) {
         if (!error) {
             console.log(`Campgorunds retrieved ${items}`)
-            res.render("campgrounds", {
+            res.render("campgrounds/index", {
                 campgrounds: items
             });
         }
@@ -35,7 +35,7 @@ app.get("/campgrounds", function(req, res) {
 
 //NEW
 app.get("/campgrounds/new", function(req, res) {
-    res.render("newcampground");
+    res.render("campgrounds/new");
 });
 
 //CREATE
@@ -68,7 +68,7 @@ app.get("/campgrounds/:id", function(req, res) {
     Campground.findById(campgroundId).populate("comments").exec(function(error, item) {
         if (!error) {
             console.log(`Campgorund ${item.name} found.`)
-            res.render("show", {
+            res.render("campgrounds/show", {
                 campground: item
             });
         }
