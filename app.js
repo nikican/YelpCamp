@@ -6,18 +6,22 @@ var bodyParser = require("body-parser"),
     express = require("express"),
     app = express();
 
-seedDB();
 
 mongoose.connect("mongodb://localhost/yelp_camp");
-
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({
     encoded: true
 }));
+app.use(express.static(__dirname + "/public"));
+seedDB();
 
 app.get("/", function(req, res) {
     res.render("landingPage");
 });
+
+// =======================
+// CAMPGORUND ROUTES
+// =======================
 
 //INDEX
 app.get("/campgrounds", function(req, res) {
