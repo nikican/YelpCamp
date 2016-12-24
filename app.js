@@ -21,11 +21,11 @@ app.get("/", function(req, res) {
 
 //INDEX
 app.get("/campgrounds", function(req, res) {
-    Campground.find({}, function(error, items) {
+    Campground.find({}, function(error, campgrounds) {
         if (!error) {
-            console.log(`Campgorunds retrieved: ${items.length}`)
+            console.log(`Campgorunds retrieved: ${campgrounds.length}`)
             res.render("campgrounds/index", {
-                campgrounds: items
+                campgrounds: campgrounds
             });
         }
         else {
@@ -43,9 +43,9 @@ app.get("/campgrounds/new", function(req, res) {
 app.post("/campgrounds", function(req, res) {
     var newCampground = req.body.campground;
 
-    Campground.create(newCampground, function(error, item) {
+    Campground.create(newCampground, function(error, campground) {
         if (!error) {
-            console.log(`Campgorund ${item.name} saved.`)
+            console.log(`Campgorund ${campground.name} saved.`)
             res.redirect("/campgrounds");
         }
         else {
@@ -58,11 +58,11 @@ app.post("/campgrounds", function(req, res) {
 app.get("/campgrounds/:id", function(req, res) {
     var campgroundId = req.params.id;
 
-    Campground.findById(campgroundId).populate("comments").exec(function(error, item) {
+    Campground.findById(campgroundId).populate("comments").exec(function(error, campground) {
         if (!error) {
-            console.log(`Campgorund ${item.name} found.`)
+            console.log(`Campgorund ${campground.name} found.`)
             res.render("campgrounds/show", {
-                campground: item
+                campground: campground
             });
         }
         else {
