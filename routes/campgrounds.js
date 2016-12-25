@@ -30,6 +30,13 @@ router.get("/new", isLoggedIn, function(req, res) {
 router.post("/", isLoggedIn, function(req, res) {
     var newCampground = req.body.campground;
 
+    var author = {
+        id: req.user.id,
+        username: req.user.username
+    };
+
+    newCampground.author = author;
+
     Campground.create(newCampground, function(error, campground) {
         if (!error) {
             console.log(`Campgorund ${campground.name} saved.`)
