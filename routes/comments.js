@@ -105,6 +105,23 @@ router.put("/:comment_id", function(req, res) {
     });
 });
 
+// comment destroy
+router.delete("/:comment_id", function(req, res) {
+    var commentId = req.params.comment_id;
+    var campgorundId = req.params.id;
+
+    Comment.findByIdAndRemove(commentId, function(error, comment) {
+        if (!error) {
+            console.log(`Comment ${commentId} deleted`);
+            res.redirect("/campgrounds/" + campgorundId);
+        }
+        else {
+            console.log("Delete error!");
+            res.redirect("back");
+        }
+    });
+});
+
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
