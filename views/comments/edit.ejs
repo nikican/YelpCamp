@@ -1,17 +1,17 @@
 <%include ../partials/header%>
 <div class="container">
     <div class="row">
-        <h1 style="text-align:center">Add new comment to <%=campground.name%></h1>
+        <h1 style="text-align:center">Edit comment</h1>
         <div style="width:40%; margin:40px auto">
-            <form action="/campgrounds/<%=campground._id%>/comments" method="POST">
+            <form action="/campgrounds/<%= campgroundId %>/comments/<%= comment._id %>?_method=PUT" method="POST">
                 <div class="form-group">
-                    <input type="text" name="comment[text]" placeholder="text" class="form-control" />
+                    <input type="text" class="form-control" name="comment[text]" placeholder="text" value="<%= comment.text %>"/>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-lg btn-block btn-primary">Submit!</button>
                 </div>
             </form>
-            <a href="/campgrounds/<%= campground._id %>">Go back</a>
+            <a href="/campgrounds/<%= campgroundId %>">Go back</a>
         </div>
     </div>
 </div>

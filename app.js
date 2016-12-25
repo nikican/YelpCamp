@@ -19,7 +19,7 @@ var campgroundRoutes = require("./routes/campgrounds"),
 mongoose.connect("mongodb://localhost/yelp_camp");
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({
-    encoded: true
+    extended: true
 }));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
