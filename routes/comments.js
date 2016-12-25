@@ -68,7 +68,7 @@ router.post("/", isLoggedIn, function(req, res) {
 });
 
 // comment edit
-router.get("/:comment_id/edit", function(req, res) {
+router.get("/:comment_id/edit", checkCommentPermissions, function(req, res) {
     var commentId = req.params.comment_id;
 
     Comment.findById(commentId, function(error, comment) {
@@ -87,7 +87,7 @@ router.get("/:comment_id/edit", function(req, res) {
 });
 
 // comment update
-router.put("/:comment_id", function(req, res) {
+router.put("/:comment_id", checkCommentPermissions, function(req, res) {
     var commentId = req.params.comment_id;
     var campgorundId = req.params.id;
 
@@ -106,7 +106,7 @@ router.put("/:comment_id", function(req, res) {
 });
 
 // comment destroy
-router.delete("/:comment_id", function(req, res) {
+router.delete("/:comment_id", checkCommentPermissions, function(req, res) {
     var commentId = req.params.comment_id;
     var campgorundId = req.params.id;
 
@@ -127,6 +127,34 @@ function isLoggedIn(req, res, next) {
         return next();
     }
     res.redirect("/login");
+}
+
+function checkCommentPermissions(req, res, next) {
+
+    //user logged in
+    if (req.isAuthenticated()) {
+        var commentId = req.params.comment_id;
+
+        Comment.findById(commentId, function(error, comment) {
+            if (!error) {
+                console.log(`Campgorund ${comment.name} found`);
+
+                //user created the comment
+                if (comment.author.id.equals(req.user._id)) {
+                    next();
+                }
+                else {
+                    res.redirect("back");
+                }
+            }
+            else {
+                console.log("Find error!");
+            }
+        });
+    }
+    else {
+        res.redirect("back");
+    }
 }
 
 module.exports = router;

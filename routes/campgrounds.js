@@ -127,7 +127,7 @@ function checkCampgroundPermissions(req, res, next) {
             if (!error) {
                 console.log(`Campgorund ${campground.name} found`);
 
-                //user created campground
+                //user created the campground
                 if (campground.autor.id.equals(req.user._id)) {
                     next();
                 }
