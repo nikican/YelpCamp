@@ -3,10 +3,11 @@ var express = require("express"),
         mergeParams: true
     }),
     Campground = require("../models/campground"),
-    Comment = require("../models/comment");
+    Comment = require("../models/comment"),
+    middleware = require("../middleware");
 
 // comment new
-router.get("/new", isLoggedIn, function(req, res) {
+router.get("/new", middleware.isLoggedIn, function(req, res) {
     var campgroundId = req.params.id;
 
     Campground.findById(campgroundId, function(error, campground) {
@@ -22,7 +23,7 @@ router.get("/new", isLoggedIn, function(req, res) {
 });
 
 // comment create
-router.post("/", isLoggedIn, function(req, res) {
+router.post("/", middleware.isLoggedIn, function(req, res) {
     var newComment = req.body.comment;
 
     var author = {
@@ -68,7 +69,7 @@ router.post("/", isLoggedIn, function(req, res) {
 });
 
 // comment edit
-router.get("/:comment_id/edit", checkCommentPermissions, function(req, res) {
+router.get("/:comment_id/edit", middleware.checkCommentPermissions, function(req, res) {
     var commentId = req.params.comment_id;
 
     Comment.findById(commentId, function(error, comment) {
@@ -87,7 +88,7 @@ router.get("/:comment_id/edit", checkCommentPermissions, function(req, res) {
 });
 
 // comment update
-router.put("/:comment_id", checkCommentPermissions, function(req, res) {
+router.put("/:comment_id", middleware.checkCommentPermissions, function(req, res) {
     var commentId = req.params.comment_id;
     var campgorundId = req.params.id;
 
@@ -106,7 +107,7 @@ router.put("/:comment_id", checkCommentPermissions, function(req, res) {
 });
 
 // comment destroy
-router.delete("/:comment_id", checkCommentPermissions, function(req, res) {
+router.delete("/:comment_id", middleware.checkCommentPermissions, function(req, res) {
     var commentId = req.params.comment_id;
     var campgorundId = req.params.id;
 
@@ -121,40 +122,5 @@ router.delete("/:comment_id", checkCommentPermissions, function(req, res) {
         }
     });
 });
-
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-}
-
-function checkCommentPermissions(req, res, next) {
-
-    //user logged in
-    if (req.isAuthenticated()) {
-        var commentId = req.params.comment_id;
-
-        Comment.findById(commentId, function(error, comment) {
-            if (!error) {
-                console.log(`Campgorund ${comment.name} found`);
-
-                //user created the comment
-                if (comment.author.id.equals(req.user._id)) {
-                    next();
-                }
-                else {
-                    res.redirect("back");
-                }
-            }
-            else {
-                console.log("Find error!");
-            }
-        });
-    }
-    else {
-        res.redirect("back");
-    }
-}
 
 module.exports = router;
