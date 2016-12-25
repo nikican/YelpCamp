@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({
     encoded: true
 }));
 app.use(express.static(__dirname + "/public"));
-seedDB();
+// seedDB();
 
 //PASSPORT CONFIG
 app.use(expressSession({

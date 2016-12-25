@@ -21,9 +21,16 @@ router.get("/new", isLoggedIn, function(req, res) {
     });
 });
 
-// cpmment create
-router.post("/comments", isLoggedIn, function(req, res) {
+// comment create
+router.post("/", isLoggedIn, function(req, res) {
     var newComment = req.body.comment;
+
+    var author = {
+        id: req.user._id,
+        username: req.user.username
+    };
+
+    newComment.author = author;
 
     var campgroundId = req.params.id;
 
