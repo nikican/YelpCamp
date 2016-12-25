@@ -1,0 +1,20 @@
+<%include ./partials/header%>
+<div class="container">
+    <div class="row">
+    <h1 style="text-align:center">Login</h1>
+    <div style="width:40%; margin:40px auto">
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <input type="text" name="username" placeholder="username" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="password" class="form-control" />
+            </div>
+            <div class="form-group">
+                <button class="btn btn-lg btn-block btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>
+<%include ./partials/footer%>
