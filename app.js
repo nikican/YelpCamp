@@ -7,6 +7,7 @@ var express = require("express"),
     Campground = require("./models/campground"),
     Comment = require("./models/comment"),
     User = require("./models/user"),
+    methodOverride = require("method-override"),
     expressSession = require("express-session"),
     app = express();
 
@@ -21,6 +22,7 @@ app.use(bodyParser.urlencoded({
     encoded: true
 }));
 app.use(express.static(__dirname + "/public"));
+app.use(methodOverride("_method"));
 // seedDB();
 
 //PASSPORT CONFIG

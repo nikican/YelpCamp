@@ -13,3 +13,7 @@
 .well {
     padding: 10px;
 }
+
+#formDelete {
+    display: inline;
+}

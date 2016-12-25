@@ -39,11 +39,11 @@ router.post("/", isLoggedIn, function(req, res) {
 
     Campground.create(newCampground, function(error, campground) {
         if (!error) {
-            console.log(`Campgorund ${campground.name} saved.`)
+            console.log(`Campgorund ${campground.name} created.`)
             res.redirect("/");
         }
         else {
-            console.log("Save error!");
+            console.log("Create error!");
         }
     });
 });
@@ -54,16 +54,67 @@ router.get("/:id", function(req, res) {
 
     Campground.findById(campgroundId).populate("comments").exec(function(error, campground) {
         if (!error) {
-            console.log(`Campgorund ${campground.name} found.`)
+            console.log(`Campgorund ${campground.name} found for show.`)
             res.render("campgrounds/show", {
                 campground: campground
             });
         }
         else {
-            console.log("Save error!");
+            console.log("Show error!");
         }
     });
 });
+
+// campground edit
+router.get("/:id/edit", function(req, res) {
+    var campgroundId = req.params.id;
+
+    Campground.findById(campgroundId, function(error, campground) {
+        if (!error) {
+            console.log(`Campgorund ${campground.name} found for edit`)
+            res.render("campgrounds/edit", {
+                campground: campground
+            });
+        }
+        else {
+            console.log("Edit error!");
+        }
+    });
+});
+
+// campground update
+router.put("/:id", function(req, res) {
+    var campgroundId = req.params.id;
+
+    var updatedCampground = req.body.campground;
+
+    Campground.findByIdAndUpdate(campgroundId, updatedCampground, function(error, campground) {
+        if (!error) {
+            console.log(`Campgorund ${campground.name} updated.`)
+            res.redirect("/campgrounds/" + campgroundId);
+        }
+        else {
+            console.log("Update error!");
+        }
+    });
+});
+
+// campground destroy
+router.delete("/:id", function(req, res) {
+    var campgroundId = req.params.id;
+
+    Campground.findByIdAndRemove(campgroundId, function(error, campground) {
+        if (!error) {
+            console.log(`Campgorund ${campground.name} removed.`)
+        }
+        else {
+            console.log("Delete error!");
+        }
+
+        res.redirect("/campgrounds");
+    });
+});
+
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
