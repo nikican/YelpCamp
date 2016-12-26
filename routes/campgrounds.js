@@ -15,7 +15,8 @@ router.get("/", function(req, res) {
             });
         }
         else {
-            console.log("Retrieve error!");
+            console.log(error);
+            req.flash("error", error.message);
         }
     });
 });
@@ -39,10 +40,11 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
     Campground.create(newCampground, function(error, campground) {
         if (!error) {
             console.log(`Campgorund ${campground.name} created.`)
-            res.redirect("/");
+            res.redirect("/campgrounds");
         }
         else {
-            console.log("Create error!");
+            console.log(error);
+            req.flash("error", error.message);
         }
     });
 });
@@ -59,7 +61,8 @@ router.get("/:id", function(req, res) {
             });
         }
         else {
-            console.log("Show error!");
+            console.log(error);
+            req.flash("error", error.message);
         }
     });
 });
@@ -84,11 +87,13 @@ router.put("/:id", middleware.checkCampgroundPermissions, function(req, res) {
     Campground.findByIdAndUpdate(campgroundId, updatedCampground, function(error, campground) {
         if (!error) {
             console.log(`Campgorund ${campground.name} updated.`)
-            res.redirect("/campgrounds/" + campgroundId);
         }
         else {
-            console.log("Update error!");
+            console.log(error);
+            req.flash("error", error.message);
         }
+
+        res.redirect("/campgrounds/" + campgroundId);
     });
 });
 
@@ -99,9 +104,11 @@ router.delete("/:id", middleware.checkCampgroundPermissions, function(req, res) 
     Campground.findByIdAndRemove(campgroundId, function(error, campground) {
         if (!error) {
             console.log(`Campgorund ${campground.name} removed.`)
+            req.flash("success", "")
         }
         else {
-            console.log("Delete error!");
+            console.log(error);
+            req.flash("error", error.message);
         }
 
         res.redirect("/campgrounds");

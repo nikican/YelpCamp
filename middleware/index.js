@@ -17,15 +17,18 @@ var middlewareObject = {
                         next();
                     }
                     else {
+                        req.flash("error", `No appropriate permission.`);
                         res.redirect("back");
                     }
                 }
                 else {
+                    req.flash("error", `Campgorund with id ${campgroundId} not found.`);
                     console.log("Find error!");
                 }
             });
         }
         else {
+            req.flash("error", "You need to be logged in.");
             res.redirect("back");
         }
     },
@@ -38,22 +41,25 @@ var middlewareObject = {
 
             Comment.findById(commentId, function(error, comment) {
                 if (!error) {
-                    console.log(`Campgorund ${comment.name} found`);
+                    console.log(`Comment ${comment.name} found`);
 
                     //user created the comment
                     if (comment.author.id.equals(req.user._id)) {
                         next();
                     }
                     else {
+                        req.flash("error", `No appropriate permission.`);
                         res.redirect("back");
                     }
                 }
                 else {
+                    req.flash("error", `Comment with id ${commentId} not found.`);
                     console.log("Find error!");
                 }
             });
         }
         else {
+            req.flash("error", "You need to be logged in.");
             res.redirect("back");
         }
     },
@@ -61,6 +67,8 @@ var middlewareObject = {
         if (req.isAuthenticated()) {
             return next();
         }
+
+        req.flash("error", "Please, login to continue.");
         res.redirect("/login");
     }
 };

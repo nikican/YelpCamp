@@ -49,20 +49,24 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                     campground.save(
                         function(error, updatedCampgorund) {
                             if (!error) {
+                                req.flash("success", "Comment saved.");
                                 res.redirect("/campgrounds/" + campground._id);
                             }
                             else {
                                 console.log(`Campground ${campground.name} not updated.`);
+                                req.flash("error", "Comment creation error.");
                             }
                         });
                 }
                 else {
-                    console.log(`Comment not created.`);
+                    console.log(error);
+                    req.flash("error", error.message);
                 }
             });
         }
         else {
-            console.log(`Campground with id: ${campgroundId} not found`);
+            console.log(error);
+            req.flash("error", error.message);
             res.redirect("/campgrounds");
         }
     });
@@ -81,7 +85,8 @@ router.get("/:comment_id/edit", middleware.checkCommentPermissions, function(req
             });
         }
         else {
-            console.log("Edit error!");
+            console.log(error);
+            req.flash("error", error.message);
             res.redirect("back");
         }
     });
@@ -100,7 +105,8 @@ router.put("/:comment_id", middleware.checkCommentPermissions, function(req, res
             res.redirect("/campgrounds/" + campgorundId);
         }
         else {
-            console.log("Update error!");
+            console.log(error);
+            req.flash("error", error.message);
             res.redirect("back");
         }
     });
@@ -114,10 +120,12 @@ router.delete("/:comment_id", middleware.checkCommentPermissions, function(req, 
     Comment.findByIdAndRemove(commentId, function(error, comment) {
         if (!error) {
             console.log(`Comment ${commentId} deleted`);
+            req.flash("succes", `Comment ${commentId} deleted`);
             res.redirect("/campgrounds/" + campgorundId);
         }
         else {
-            console.log("Delete error!");
+            console.log(error);
+            req.flash("error", error.message);
             res.redirect("back");
         }
     });
