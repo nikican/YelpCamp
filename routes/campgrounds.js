@@ -103,8 +103,8 @@ router.delete("/:id", middleware.checkCampgroundPermissions, function(req, res) 
 
     Campground.findByIdAndRemove(campgroundId, function(error, campground) {
         if (!error) {
-            console.log(`Campgorund ${campground.name} removed.`)
-            req.flash("success", "")
+            console.log(`Campgorund ${campground.name} deleted.`)
+            req.flash("success", `Campgorund ${campground.name} deleted.`);
         }
         else {
             console.log(error);

@@ -13,7 +13,7 @@ var middlewareObject = {
                     console.log(`Campgorund ${campground.name} found`);
 
                     //user created the campground
-                    if (campground.autor.id.equals(req.user._id)) {
+                    if (campground.author.id.equals(req.user._id)) {
                         next();
                     }
                     else {

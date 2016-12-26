@@ -49,7 +49,7 @@ app.use(function(req, res, next) {
 
 // root route
 app.get("/", function(req, res) {
-    res.render("landingPage");
+    res.render("landing");
 });
 
 // use routes
