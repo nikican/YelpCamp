@@ -18,7 +18,7 @@ var campgroundRoutes = require("./routes/campgrounds"),
     authenticationRoutes = require("./routes/authentication");
 
 // database connection
-var databaseURL = process.env.DATABASE_UR || "mongodb://localhost/yelp_camp";
+var databaseURL = process.env.DATABASE_URL || "mongodb://localhost/yelp_camp";
 mongoose.connect(databaseURL);
 
 app.set("view engine", "ejs");
