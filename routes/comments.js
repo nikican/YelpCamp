@@ -49,12 +49,11 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                     campground.save(
                         function(error, updatedCampgorund) {
                             if (!error) {
-                                req.flash("success", "Comment saved.");
                                 res.redirect("/campgrounds/" + campground._id);
                             }
                             else {
-                                console.log(`Campground ${campground.name} not updated.`);
-                                req.flash("error", "Comment creation error.");
+                                console.log(error);
+                                req.flash("error", error.message);
                             }
                         });
                 }
