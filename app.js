@@ -10,12 +10,13 @@ var express = require("express"),
     methodOverride = require("method-override"),
     flash = require("connect-flash"),
     expressSession = require("express-session"),
+    routes = require("./routes"),
     app = express();
 
 // aquire routes
-var campgroundRoutes = require("./routes/campgrounds"),
-    commentRoutes = require("./routes/comments"),
-    authenticationRoutes = require("./routes/authentication");
+// var campgroundRoutes = require("./routes/campgrounds"),
+//     commentRoutes = require("./routes/comments"),
+//     authenticationRoutes = require("./routes/authentication");
 
 // database connection
 var databaseURL = process.env.DATABASE_URL || "mongodb://localhost/yelp_camp";
@@ -50,15 +51,17 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.use(routes);
+
 // root route
 app.get("/", function(req, res) {
     res.render("landing");
 });
 
 // use routes
-app.use("/campgrounds", campgroundRoutes);
-app.use("/campgrounds/:id/comments", commentRoutes);
-app.use("/", authenticationRoutes);
+// app.use("/campgrounds", campgroundRoutes);
+// app.use("/campgrounds/:id/comments", commentRoutes);
+// app.use("/", authenticationRoutes);
 
 // server start
 app.listen(process.env.PORT, process.env.IP, function() {
