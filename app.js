@@ -1,26 +1,15 @@
 var express = require("express"),
     bodyParser = require("body-parser"),
-    mongoose = require("mongoose"),
     passport = require("passport"),
     LocalStrategy = require("passport-local"),
     seedDB = require("./seeds"),
-    Campground = require("./models/campground"),
-    Comment = require("./models/comment"),
+    db = require('./models/db'),
     User = require("./models/user"),
     methodOverride = require("method-override"),
     flash = require("connect-flash"),
     expressSession = require("express-session"),
     routes = require("./routes"),
     app = express();
-
-// aquire routes
-// var campgroundRoutes = require("./routes/campgrounds"),
-//     commentRoutes = require("./routes/comments"),
-//     authenticationRoutes = require("./routes/authentication");
-
-// database connection
-var databaseURL = process.env.DATABASE_URL || "mongodb://localhost/yelp_camp";
-mongoose.connect(databaseURL);
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({
@@ -29,9 +18,9 @@ app.use(bodyParser.urlencoded({
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
-// seedDB();
+app.use(routes);
 
-//PASSPORT CONFIG
+//passport config
 app.use(expressSession({
     secret: "Nomi is Russian blue",
     resave: false,
@@ -44,6 +33,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// locals
 app.use(function(req, res, next) {
     res.locals.currentUser = req.user;
     res.locals.errorMessage = req.flash("error");
@@ -51,17 +41,10 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use(routes);
-
 // root route
 app.get("/", function(req, res) {
     res.render("landing");
 });
-
-// use routes
-// app.use("/campgrounds", campgroundRoutes);
-// app.use("/campgrounds/:id/comments", commentRoutes);
-// app.use("/", authenticationRoutes);
 
 // server start
 app.listen(process.env.PORT, process.env.IP, function() {
