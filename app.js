@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
-app.use(routes);
+
 
 //passport config
 app.use(expressSession({
@@ -40,6 +40,8 @@ app.use(function(req, res, next) {
     res.locals.successMessage = req.flash("success");
     next();
 });
+
+app.use(routes);
 
 // root route
 app.get("/", function(req, res) {
